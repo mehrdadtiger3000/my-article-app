@@ -1,38 +1,39 @@
-import Container from '@/components/container'
-import data from '@/database/db.json' 
-import Link from 'next/link'
+import Container from '@/components/container';
+import { sql } from '@vercel/postgres';
+import Link from 'next/link';
 
-export interface IGetArticles {
-    id: number | string;
-    title: string;
-    description: string;
-}
+// این بخش باعث می‌شود صفحه همیشه آخرین داده‌ها را از دیتابیس بگیرد و کش نکند
+export const revalidate = 0;
 
 async function BlogsPage() {
-    // خواندن داده‌ها مستقیم از فایل JSON (بدون نیاز به fetch و دیتابیس آنلاین)
-    const articles = data.articles as IGetArticles[];
+    // گرفتن مستقیم داده‌ها از دیتابیس در سمت سرور
+    const { rows: articles } = await sql`SELECT * FROM blogs ORDER BY created_at DESC;`;
 
     return (
         <Container>
             <h1 className="text-3xl font-bold my-8 text-right" dir="rtl">لیست مقالات</h1>
             <div className="grid gap-4" dir="rtl">
-                {articles.map((article) => (
-                    <div key={article.id} className="border p-4 rounded shadow-sm text-right">
-                        <h2 className="text-xl font-bold">{article.title}</h2>
-                        <p className="text-gray-600 my-2">
-                            {article.description.substring(0, 100)}...
-                        </p>
-                        <Link 
-                            href={`/blogs/${article.id}`} 
-                            className="text-blue-500 hover:underline"
-                        >
-                            ادامه مطلب
-                        </Link>
-                    </div>
-                ))}
+                {articles.length === 0 ? (
+                    <p className="text-center text-gray-500">هنوز مقاله‌ای ثبت نشده است.</p>
+                ) : (
+                    articles.map((article) => (
+                        <div key={article.id} className="border p-4 rounded shadow-sm text-right bg-white">
+                            <h2 className="text-xl font-bold">{article.title}</h2>
+                            <p className="text-gray-600 my-2">
+                                {article.description}
+                            </p>
+                            <Link 
+                                href={`/blogs/${article.id}`} 
+                                className="text-blue-500 hover:underline block mt-2"
+                            >
+                                ادامه مطلب
+                            </Link>
+                        </div>
+                    ))
+                )}
             </div>
         </Container>
-    )
+    );
 }
 
-export default BlogsPage
+export default BlogsPage;
