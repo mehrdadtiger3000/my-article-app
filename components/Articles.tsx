@@ -10,6 +10,7 @@ function Articles() {
     fetch("/api/blogs")
       .then((res) => res.json())
       .then((data) => {
+         console.log("داده‌های دریافتی از دیتابیس:", data); 
         if (data.blogs) {
           setBlogs(data.blogs);
         }
