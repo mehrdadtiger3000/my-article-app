@@ -16,3 +16,6 @@
 # others
 .DS_Store
 *.pem
+
+.vercel
+.env*

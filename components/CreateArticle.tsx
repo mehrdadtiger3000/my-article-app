@@ -5,16 +5,37 @@ import { useState } from "react";
 function CreateArticle() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const handleCreateArticle = () => {
-    fetch("http://localhost:8000/articles", {
-      method: "post",
-      body: JSON.stringify({
-        id: Math.floor(Math.random() * 10),
-        title: title,
-        description: description,
-      }),
-    });
+  const [loading, setLoading] = useState(false); // برای نمایش وضعیت در حال ارسال
+
+  const handleCreateArticle = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/blogs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+        }),
+      });
+
+      if (res.ok) {
+        alert("مقاله با موفقیت ذخیره شد!");
+        setTitle(""); // پاک کردن فرم بعد از موفقیت
+        setDescription("");
+      } else {
+        alert("خطایی در ذخیره مقاله رخ داد.");
+      }
+    } catch (error) {
+      console.error("خطا:", error);
+      alert("خطای ارتباط با سرور");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <Container>
       <div className="bg-slate-200 py-24 flex flex-col px-8">
@@ -33,9 +54,12 @@ function CreateArticle() {
         ></textarea>
         <button
           onClick={handleCreateArticle}
-          className="bg-blue-500 mt-4 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+          disabled={loading}
+          className={`mt-4 text-white px-4 py-2 rounded-md transition ${
+            loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+          }`}
         >
-          Submit
+          {loading ? "در حال ارسال..." : "Submit"}
         </button>
       </div>
     </Container>
