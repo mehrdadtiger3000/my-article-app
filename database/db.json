@@ -1,0 +1,25 @@
+{
+  "articles": [
+    {
+      "id": "1",
+      "title": "title 1",
+      "description": "aaaaaaaaaaaaaa  fljasdasdfasdf asfas f asf saf sadf saf sf sf hf jkasdfh "
+    },
+    {
+      "id": "2",
+      "title": "title 2",
+      "description": "asdfasf asdfhsaidfh asdi ishd fiash dfljash dfljasdhf jkasdfh "
+    },
+    {
+      "id": "yemiDw6zyXc",
+      "title": "مقاله جدید",
+      "description": "در این مقاله به اموزش next js میپردازیم "
+    },
+    {
+      "id": "LxTP1Q3lVMA",
+      "title": "مقاله چهارم ",
+      "description": "سشسسشم ینبت شمکسنیت بمشسنتیب مشسنتی بمکسشنی زکمشسنیت مسشینت زکمسیشنت کمسین مسنیب مسشنیاب کشسنیا بکنسیا کمشسنیا کمشسنی زکمسشین رکمسین رکمسشنی "
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
