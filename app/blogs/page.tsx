@@ -1,29 +1,38 @@
-import Articles from "@/components/Articles";
-import Container from "@/components/container";
-import Link from "next/link";
-import React from "react";
+import Container from '@/components/container'
+import data from '@/database/db.json' 
+import Link from 'next/link'
+
 export interface IGetArticles {
-  id?: number,
-  title?: string,
-  description?: string
-}
-async function Blogs() {
-  const result = await fetch("http://localhost:8000/articles")
-  const data= await result.json() as IGetArticles[]
-  
-  return (
-    <Container>
-      <div className="grid grid-cols-4 gap-4 py-12">
-        {
-          data.map((item)=>(
-          <Link key={item.id} href={`/blogs/${item.id}`} >
-          <Articles key={item.id} {...item } /></Link>
-        ))
-        }
-
-      </div>
-    </Container>
-  );
+    id: number | string;
+    title: string;
+    description: string;
 }
 
-export default Blogs;
+async function BlogsPage() {
+    // خواندن داده‌ها مستقیم از فایل JSON (بدون نیاز به fetch و دیتابیس آنلاین)
+    const articles = data.articles as IGetArticles[];
+
+    return (
+        <Container>
+            <h1 className="text-3xl font-bold my-8 text-right" dir="rtl">لیست مقالات</h1>
+            <div className="grid gap-4" dir="rtl">
+                {articles.map((article) => (
+                    <div key={article.id} className="border p-4 rounded shadow-sm text-right">
+                        <h2 className="text-xl font-bold">{article.title}</h2>
+                        <p className="text-gray-600 my-2">
+                            {article.description.substring(0, 100)}...
+                        </p>
+                        <Link 
+                            href={`/blogs/${article.id}`} 
+                            className="text-blue-500 hover:underline"
+                        >
+                            ادامه مطلب
+                        </Link>
+                    </div>
+                ))}
+            </div>
+        </Container>
+    )
+}
+
+export default BlogsPage
